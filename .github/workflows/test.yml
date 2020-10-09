@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Test
-      uses: paulholden2/smartsheet-update-row@master
+      uses: paulholden2/smartsheet-update-row@v1
       with:
         access-token: ${{ secrets.SMARTSHEET_ACCESS_TOKEN }}
         sheet-id: ${{ secrets.SMARTSHEET_SHEET_ID }}
