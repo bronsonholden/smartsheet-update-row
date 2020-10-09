@@ -1,0 +1,24 @@
+name: 'Update Smartsheet Row'
+description: 'Updates a row to a Smartsheet'
+branding:
+  icon: 'edit'
+  color: 'blue'
+inputs:
+  access-token:
+    description: 'Smartsheet API access token'
+    required: true
+  sheet-id:
+    description: 'Smartsheet sheet ID'
+    required: true
+  row-id:
+    description: 'The row ID to update'
+    required: true
+  column-name:
+    description: 'Title of the column to update'
+    required: true
+  cell-value:
+    description: 'The value to insert in the given column'
+    required: true
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

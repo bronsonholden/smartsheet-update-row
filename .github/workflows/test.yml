@@ -1,0 +1,19 @@
+name: Test
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Test
+      uses: paulholden2/smartsheet-update-row@master
+      with:
+        access-token: ${{ secrets.SMARTSHEET_ACCESS_TOKEN }}
+        sheet-id: ${{ secrets.SMARTSHEET_SHEET_ID }}
+        row-id: ${{ secrets.SMARTSHEET_ROW_ID }}
+        column-name: Test
+        cell-value: Value
