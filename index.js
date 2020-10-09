@@ -7,8 +7,6 @@ async function getColumnId(smartsheet, sheetId, columnName) {
     id: sheetId
   });
 
-  console.log(response);
-
   const columns = response.columns;
 
   for (let i = 0; i < columns.length; ++i) {
