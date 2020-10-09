@@ -2,7 +2,7 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const Smartsheet = require('smartsheet');
 
-async function getColumnId(smartsheet, sheetId, columnName) {
+async function getColumn(smartsheet, sheetId, columnName) {
   const response = await smartsheet.sheets.getSheet({
     id: sheetId
   });
@@ -13,11 +13,21 @@ async function getColumnId(smartsheet, sheetId, columnName) {
     const col = columns[i];
 
     if (col.title === columnName) {
-      return Promise.resolve(col.id);
+      return Promise.resolve(col);
     }
   }
 
   return Promise.reject(`Unable to locate a column titled '${columnName}' in your sheet`);
+}
+
+function serializeValue(cellValue, columnType) {
+  switch (columnType) {
+    case 'DATE':
+    case 'DATETIME':
+      return new Date(cellValue);
+    default:
+      return cellValue;
+  }
 }
 
 async function run() {
@@ -32,13 +42,14 @@ async function run() {
     });
 
     // Retrieve the column ID
-    const columnId = await getColumnId(smartsheet, sheetId, columnName);
+    const column = await getColumn(smartsheet, sheetId, columnName);
+    const columnId = column.id;
 
     const response = await smartsheet.sheets.updateRow({
       sheetId,
       body: [{
         id: rowId,
-        cells: [ { columnId, value: cellValue } ]
+        cells: [{ columnId, value: serializeValue(cellValue, column.type) }]
       }]
     });
   } catch (error) {

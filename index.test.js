@@ -34,6 +34,7 @@ describe('Updates row in Smartsheet', () => {
       columns: [
         {
           id: columnId,
+          type: 'TEXT_NUMBER',
           title: mockInputs['column-name']
         }
       ]
@@ -64,6 +65,7 @@ describe('Updates row in Smartsheet', () => {
       id: mockInputs['sheet-id'],
       columns: [{
         id: columnId,
+        type: 'TEXT_NUMBER',
         title: `not-${mockInputs['column-name']}`
       }]
     }));
@@ -72,6 +74,39 @@ describe('Updates row in Smartsheet', () => {
     expect(mockGetSheet).toHaveBeenCalledTimes(1);
     expect(mockUpdateRow).toHaveBeenCalledTimes(0);
     expect(core.setFailed).toHaveBeenCalledTimes(1);
+  });
+
+  test('date column', async () => {
+    mockGetSheet.mockImplementation(() => Promise.resolve({
+      id: mockInputs['sheet-id'],
+      columns: [{
+        id: columnId,
+        type: 'DATE',
+        title: mockInputs['column-name']
+      }]
+    }));
+
+    const mockDate = '10/01/2000';
+
+    core.getInput = jest.fn(name => {
+      if (name === 'cell-value') {
+        return mockDate;
+      } else {
+        return mockInputs[name];
+      }
+    });
+
+    await run();
+
+    expect(mockGetSheet).toHaveBeenCalledTimes(1);
+    expect(mockUpdateRow).toHaveBeenCalledTimes(1);
+    expect(mockUpdateRow).toHaveBeenCalledWith({
+      sheetId: mockInputs['sheet-id'],
+      body: [{
+        id: mockInputs['row-id'],
+        cells: [ { columnId, value: new Date(mockDate) } ]
+      }]
+    });
   });
 
   test('updates the cell value', async () => {
