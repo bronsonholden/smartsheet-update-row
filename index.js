@@ -7,8 +7,12 @@ async function getColumnId(smartsheet, sheetId, columnName) {
     id: sheetId
   });
 
-  for (let i = 0; i < response.result.columns.length; ++i) {
-    const col = response.result.columns[i];
+  console.log(response);
+
+  const columns = response.columns;
+
+  for (let i = 0; i < columns.length; ++i) {
+    const col = columns[i];
 
     if (col.title === columnName) {
       return Promise.resolve(col.id);
