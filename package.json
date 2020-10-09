@@ -15,5 +15,8 @@
     "@actions/github": "^4.0.0",
     "jest": "^26.5.2",
     "smartsheet": "^2.101.0"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.24.1"
   }
 }
