@@ -1,0 +1,33 @@
+name: Package
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'index.js'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/package.yml'
+
+jobs:
+  package:
+    name: Generate entry point file
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        ref: master
+
+    - name: Package
+      run: |
+        npm ci
+        npm test
+        npm run build
+
+    - name: Commit
+      run: |
+        git config --global user.name "GitHub Actions"
+        git add dist/
+        git commit -m "chore: Update dist/index.js" || echo "No changes to commit"
+        git push origin HEAD:master
