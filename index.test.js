@@ -62,12 +62,10 @@ describe('Updates row in Smartsheet', () => {
   test('missing column', async () => {
     mockGetSheet.mockImplementation(() => Promise.resolve({
       id: mockInputs['sheet-id'],
-      columns: [
-        {
-          id: columnId,
-          title: `not-${mockInputs['column-name']}`
-        }
-      ]
+      columns: [{
+        id: columnId,
+        title: `not-${mockInputs['column-name']}`
+      }]
     }));
 
     await run();
